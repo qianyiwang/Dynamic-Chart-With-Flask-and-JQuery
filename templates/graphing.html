@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% extends "header.html" %}
+{% block body %}
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+	<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<button id="update">Update the Chart</button>
+	<button id="stopUpdate">Stop Update</button>
+	<div class="ct-chart ct-perfect-fourth"></div>
+	<script type="text/javascript">
+
+		var myChart; 
+		var runFlag = true;
+		var getData = $.get('/data')
+		getData.done(function(result){
+			var data = {
+				labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+				series: [
+					result.val
+				]
+			};
+			var options = {
+				width: 800,
+				hieght: 500
+			}
+
+			myChart = new Chartist.Line('.ct-chart', data, options)
+		}); 
+
+		function updateChart(){
+			var updatedData = $.get('/data');
+			updatedData.done(function(result){
+				var data = {
+					labels: result.time,
+					series: [
+						result.val
+					]
+				};
+
+				console.log(data);
+
+				myChart.update(data);
+			});
+		}
+
+		// function startTimer(){
+
+		// 	var tid = setInterval(timerFunction, 2000);
+		// }
+
+		$('#update').on('click', function(){
+			runFlag = true;
+
+		});
+		$('#stopUpdate').on('click', function(){
+			
+			var response = $.get('/stop_update');
+			response.done(function(result){
+				runFlag = false;
+				var data = {
+				labels: result.time,
+				series: [
+					result.val
+				]
+			};
+			myChart.update(data);
+			});
+			
+		});
+
+		var tid = setInterval(function(){
+			if(runFlag){
+				updateChart();
+			}
+		}, 2000);
+
+		// function timerFunction(){
+		// 	if(runFlag){
+		// 		updateChart();
+		// 	}
+		// }
+
+		function abortTimer() { 
+			// to be called when you want to stop the timer
+  			clearInterval(tid);
+		}
+
+	</script>
+</body>
+
+{% endblock %}
