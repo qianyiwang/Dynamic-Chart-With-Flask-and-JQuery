@@ -5,11 +5,23 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
 	<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<style type="text/css">
+		body{
+			height: 100%;
+			width: 100%;
+		}
+		div.ct-chart{
+			background-color: #FBF5E6;
+			width:90%;
+    		height:90%;
+    		/*border: 1px solid #73AD21;*/
+		}
+	</style>
 </head>
 <body>
 	<button id="update">Update the Chart</button>
 	<button id="stopUpdate">Stop Update</button>
-	<div class="ct-chart ct-perfect-fourth"></div>
+	<div class="ct-chart"></div>
 	<script type="text/javascript">
 
 		var myChart; 
@@ -23,8 +35,8 @@
 				]
 			};
 			var options = {
-				width: 800,
-				hieght: 500
+				// width: 1500,
+				// height: 800
 			}
 
 			myChart = new Chartist.Line('.ct-chart', data, options)
